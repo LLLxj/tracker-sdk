@@ -1,0 +1,32 @@
+{
+  "name": "tracker",
+  "version": "0.0.1",
+  "description": "",
+  "module": "dist/esm/index.js",
+  "types": "dist/esm/index.d.ts",
+  "scripts": {
+    "dev": "father dev",
+    "build": "father build",
+    "build:deps": "father prebundle",
+    "prepublishOnly": "father doctor && npm run build"
+  },
+  "keywords": [],
+  "authors": [],
+  "license": "MIT",
+  "files": [
+    "dist",
+    "compiled"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "father": "^4.5.1"
+  },
+  "dependencies": {
+    "@types/lodash": "^4.17.14",
+    "father-build": "^1.22.5",
+    "lodash": "^4.17.21",
+    "uuid": "^11.0.4"
+  }
+}
