@@ -4,25 +4,34 @@
  */
 import type { TrackerOptions } from "@/types/tracker"
 import lodash from 'lodash'
+import { log } from "@/utils/log";
 
 export const routeChangeListener = (
-  options: TrackerOptions,
+  trackerOptions: TrackerOptions,
   callback: ({ url }: { url: string }) => void
 ) => {
-  if (!options.enabledGlobalPvEvent) {
+  if (!trackerOptions.enabledGlobalPvEvent) {
     return;
   };
 
   let recentlyUrl = location.href;
+
+  const reportData = {
+    url: recentlyUrl
+  }
 
   const { pushState, replaceState } = window.history;
 
   if (lodash.isFunction(pushState)) {
     window.history.pushState = function (...args) {
       pushState.apply(window.history, args);
-      callback({
-        url: recentlyUrl
-      });
+      if (trackerOptions.debug) {
+        log({
+          level: 'success',
+          message: `pushState: ${JSON.stringify(reportData)}`,
+        })
+      }
+      callback(reportData);
       recentlyUrl = location.href;
     };
   }
@@ -30,9 +39,13 @@ export const routeChangeListener = (
   if (lodash.isFunction(replaceState)) {
     window.history.replaceState = function (...args) {
       replaceState.apply(window.history, args);
-      callback({
-        url: recentlyUrl
-      });
+      if (trackerOptions.debug) {
+        log({
+          level: 'success',
+          message: `replaceState: ${JSON.stringify(reportData)}`,
+        })
+      }
+      callback(reportData);
       recentlyUrl = location.href;
     };
   }
@@ -45,9 +58,13 @@ export const routeChangeListener = (
 
   // 监听 popstate 或 hashchange 事件
   window.addEventListener(singlePageEvent, function () {
-    callback({
-      url: recentlyUrl
-    });
+    if (trackerOptions.debug) {
+      log({
+        level: 'success',
+        message: `${singlePageEvent}: ${JSON.stringify(reportData)}`,
+      })
+    }
+    callback(reportData);
     recentlyUrl = location.href;
   });
 }

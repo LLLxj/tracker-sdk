@@ -6,18 +6,20 @@ export const pageOnloadListener = (
   trackerOptions: TrackerOptions,
   callback: (data: Record<string, any>) => void,
 ) => {
-  if (!trackerOptions.openGlobalPvEvent) {
+  if (!trackerOptions.enabledGlobalPvEvent) {
     return
   }
   window.addEventListener('load', () => {
     const data = {
       name: TrackerEventTypeNameEnum.pageOpen,
     };
-    trackerOptions.debug &&
+    if (trackerOptions.debug) {
       log({
         level: 'success',
         message: `load: ${JSON.stringify(data)}`,
       });
+    }
+          
     callback(data);
   });
 }

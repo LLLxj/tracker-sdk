@@ -1,11 +1,12 @@
+import { log } from "@/utils/index"
 import type { TrackerOptions, FunctionListenerCallbackData } from "@/types/index"
 
 export const functionListener = (
-  options: TrackerOptions,
+  trackerOptions: TrackerOptions,
   callback: (data: FunctionListenerCallbackData) => void
 ) => {
-  console.log(options)
-  if (!options.enabledGlobalClickEvent) {
+  console.log(trackerOptions)
+  if (!trackerOptions.enabledGlobalClickEvent) {
     return;
   }
 
@@ -38,8 +39,8 @@ export const functionListener = (
     if (invalidateElementTypes?.includes($elementType)) {
       return;
     }
-    const attributeNameKey = options.attributeNameKey || '';
-    const attributeCategoryKey = options.attributeCategoryKey || '';
+    const attributeNameKey = trackerOptions.attributeNameKey || '';
+    const attributeCategoryKey = trackerOptions.attributeCategoryKey || '';
     let name;
     let category;
     if (attributeNameKey) {
@@ -54,7 +55,12 @@ export const functionListener = (
         category,
         name,
       };
-      console.log(data)
+      if (trackerOptions.debug) {
+        log({
+          level: 'success',
+          message: `click: ${JSON.stringify(data)}`,
+        });
+      }
       callback(data);
     }
   });

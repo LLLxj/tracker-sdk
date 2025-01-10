@@ -6,7 +6,7 @@ export const pageUnloadListener = (
   trackerOptions: TrackerOptions,
   callback: (data: Record<string, any>) => void,
 ) => {
-  if (!trackerOptions.openGlobalPvEvent) {
+  if (!trackerOptions.enabledGlobalPvEvent) {
     return
   }
   const unloadEvent = trackerOptions.debug ? 'beforeunload' : 'unload';
@@ -15,11 +15,13 @@ export const pageUnloadListener = (
       name: TrackerEventTypeNameEnum.pageClose,
       
     };
-    trackerOptions.debug &&
+    if (trackerOptions.debug) {
       log({
         level: 'success',
         message: `unload: ${JSON.stringify(data)}`,
       });
+    }
+      
     callback(data);
   });
 }
