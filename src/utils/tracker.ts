@@ -3,7 +3,7 @@ import {
   pageOnloadListener,
   pageUnloadListener,
   routeChangeListener,
-  uploadData,
+  mixinUploader,
 } from '@/lib/index'
 import {
   getTime,
@@ -22,6 +22,8 @@ class Tracker {
       name: 'tracker',
       debug: false,
       openGlobalPvEvent: true,
+      attributeNameKey: 'tracker-name',
+      attributeCategoryKey: 'tracker-category',
     }
     this.options = { ...defaultOptions, ...trackerOptions };
     log({
@@ -43,7 +45,7 @@ class Tracker {
     });
   }
 
-  track(trackEventType: TrackerEventTypeEnum) {
+  track(trackEventType: TrackerEventTypeEnum, data?: Record<string, any>) {
     const reportData = {
       version: '1.0.0',
       eventType: trackEventType,
@@ -54,11 +56,10 @@ class Tracker {
       title: document.title,
       url: getURL(),
       pathname: location.pathname,
-      // version: this.app_version,
+      ...data
     }
     const reportRequestUrl = `${this.options.host}${this.options.reportPath}`
-    uploadData(reportData, reportRequestUrl)
-    console.log(reportData)
+    mixinUploader(reportRequestUrl, reportData)
   }
 }
 

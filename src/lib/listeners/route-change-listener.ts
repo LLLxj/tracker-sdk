@@ -9,7 +9,7 @@ export const routeChangeListener = (
   options: TrackerOptions,
   callback: ({ url }: { url: string }) => void
 ) => {
-  if (!options.openGlobalPvEvent) {
+  if (!options.enabledGlobalPvEvent) {
     return;
   };
 

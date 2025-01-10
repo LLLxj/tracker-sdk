@@ -6,6 +6,9 @@ export interface TrackerOptions {
   clientId: string;
   authorization: string | (() => string);
   debug?: boolean;
-  openGlobalPvEvent?: boolean;
+  enabledGlobalPvEvent?: boolean;
+  enabledGlobalClickEvent?: boolean;
   hostBlockList?: string[];
+  attributeNameKey?: string;
+  attributeCategoryKey?: string;
 }

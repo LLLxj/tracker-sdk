@@ -12,6 +12,7 @@ export const performanceListener = (
   window.addEventListener('load', () => {
    
     const [ navigationEntry ] = performance.getEntriesByType('navigation') as PerformanceNavigationTiming[];
+
     if (navigationEntry) {
       const data = {
         type: TrackerEventTypeEnum.performance,

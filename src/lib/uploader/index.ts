@@ -1,4 +1,4 @@
-export const uploadData = (data: Record<string, any>, url: string) => {
+export const mixinUploader = (url: string, data: Record<string, any>) => {
   if (navigator.sendBeacon) {
     navigator.sendBeacon(url, JSON.stringify(data));
   } else {
@@ -9,3 +9,6 @@ export const uploadData = (data: Record<string, any>, url: string) => {
     }).catch((err) => console.error('Upload error:', err));
   }
 };
+
+export * from './beacon-uploader'
+export * from './fetch-uploader'
