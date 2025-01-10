@@ -1,9 +1,10 @@
-import type { TrackerOptions } from "@/types/tracker"
+import type { TrackerOptions, FunctionListenerCallbackData } from "@/types/index"
 
-export const clickListener = (
+export const functionListener = (
   options: TrackerOptions,
-  callback: () => void
+  callback: (data: FunctionListenerCallbackData) => void
 ) => {
+  console.log(options)
   if (!options.enabledGlobalClickEvent) {
     return;
   }
@@ -12,24 +13,22 @@ export const clickListener = (
 
   const findTrackCategoryElement = (
     event: MouseEvent, attributeKey: string
-  ): string => {
+  ): string | null | undefined => {
     let currentElement: HTMLElement | null = event.target as HTMLElement;
     const trackCategory = currentElement
-      // .closest('[moli-track-name]')
+      .closest(`[${attributeKey}]`)
       ?.getAttribute(attributeKey);
-    console.log(trackCategory)
-    return ''
+    return trackCategory
   }
 
   const findTrackNameElement = (
     event: MouseEvent, attributeKey: string
-  ): string => {
+  ): string | null | undefined => {
     let currentElement: HTMLElement | null = event.target as HTMLElement;
     const trackName = currentElement
-      // .closest('[moli-track-name]')
+      .closest(`[${attributeKey}]`)
       ?.getAttribute(attributeKey);
-    console.log(trackName)
-    return ''
+    return trackName
   }
 
 
@@ -39,28 +38,24 @@ export const clickListener = (
     if (invalidateElementTypes?.includes($elementType)) {
       return;
     }
-    console.log(target)
-    console.log($elementType)
     const attributeNameKey = options.attributeNameKey || '';
     const attributeCategoryKey = options.attributeCategoryKey || '';
-    let trackName: string = '';
-    let trackCategory: string = '';
+    let name;
+    let category;
     if (attributeNameKey) {
-      trackName = findTrackNameElement(event, attributeNameKey)
+      name = findTrackNameElement(event, attributeNameKey)
     }
     if (attributeCategoryKey) {
-      trackCategory = findTrackCategoryElement(event, attributeCategoryKey)
+      category = findTrackCategoryElement(event, attributeCategoryKey)
     }
-    const data = {
-      en: 'click',
-      tagName: target.tagName,
-      id: target.id,
-      className: target.className,
-      timestamp: Date.now(),
-    };
-    if (trackName && trackCategory) {
+    
+    if (name && category) {
+      const data: FunctionListenerCallbackData = {
+        category,
+        name,
+      };
       console.log(data)
-      callback();
+      callback(data);
     }
   });
 };

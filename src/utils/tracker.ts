@@ -4,13 +4,17 @@ import {
   pageUnloadListener,
   routeChangeListener,
   mixinUploader,
+  functionListener,
 } from '@/lib/index'
 import {
   getTime,
   getSessionId,
   getURL,
 } from '@/utils/index'
-import type { TrackerOptions } from '@/types/index'
+import type {
+  TrackerOptions,
+  FunctionListenerCallbackData
+} from '@/types/index'
 import { TrackerEventTypeEnum } from '@/types/trackerEventType'
 
 class Tracker {
@@ -42,6 +46,9 @@ class Tracker {
     });
     routeChangeListener(this.options, () => {
       this.track(TrackerEventTypeEnum.pageView);
+    });
+    functionListener(this.options, (data: FunctionListenerCallbackData) => {
+      this.track(TrackerEventTypeEnum.click, data);
     });
   }
 

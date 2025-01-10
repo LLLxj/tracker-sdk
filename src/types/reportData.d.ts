@@ -10,3 +10,8 @@ export interface BaseReportData {
   url: string;
   pathname: string;
 }
+
+export interface FunctionListenerCallbackData {
+  name: string;
+  category: string;
+}
