@@ -4,6 +4,7 @@ export enum TrackerEventTypeEnum {
   pageView = 'pageView',
   pageClose = 'pageClose',
   click = 'click',
+  error = 'error'
 }
 
 export enum TrackerEventTypeNameEnum {
@@ -12,4 +13,5 @@ export enum TrackerEventTypeNameEnum {
   pageView = '查看页面',
   pageClose = '页面关闭',
   click = '点击',
+  error = '错误'
 }

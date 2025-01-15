@@ -5,7 +5,6 @@ export const functionListener = (
   trackerOptions: TrackerOptions,
   callback: (data: FunctionListenerCallbackData) => void
 ) => {
-  console.log(trackerOptions)
   if (!trackerOptions.enabledGlobalClickEvent) {
     return;
   }

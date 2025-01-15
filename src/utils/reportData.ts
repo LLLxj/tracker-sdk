@@ -18,6 +18,14 @@ export const getTime = () => {
   )}:${padZero(second)}`;
 }
 
+export const getTimestamp = () => {
+  return Date.now()
+}
+
+export const getIsoTime = () => {
+  return new Date().toISOString()
+}
+
 export const _decodeURI = (uri: string) => {
   let result = uri;
   try {

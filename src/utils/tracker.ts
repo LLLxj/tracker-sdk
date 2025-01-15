@@ -5,6 +5,7 @@ import {
   routeChangeListener,
   mixinUploader,
   functionListener,
+  clickListener,
 } from '@/lib/index'
 import {
   getTime,
@@ -15,19 +16,27 @@ import type {
   TrackerOptions,
   FunctionListenerCallbackData
 } from '@/types/index'
+import OfflineLogManage from "@/lib/log/offline-log";
+import type { OfflineLog } from "@/lib/log/offline-log";
 import { TrackerEventTypeEnum } from '@/types/trackerEventType'
+import BehaviorLogManage from "@/lib/log/behavior-log";
+import type { BehaviorLog } from "@/lib/log/behavior-log";
 
 class Tracker {
 
   public options: TrackerOptions;
+  public offlineLogManage;
+  public behaviorLogManage;
 
   constructor(trackerOptions: TrackerOptions) {
     const defaultOptions = {
       name: 'tracker',
       debug: false,
-      openGlobalPvEvent: true,
+      enabledGlobalPvEvent: true,
+      enabledBehaviorLog: true,
       attributeNameKey: 'tracker-name',
       attributeCategoryKey: 'tracker-category',
+      enabledBehaviorLogStackSize: 3
     }
     this.options = { ...defaultOptions, ...trackerOptions };
     log({
@@ -35,6 +44,12 @@ class Tracker {
       message: `${this.options.name}实例化成功`
     })
     this.initEvent();
+    this.offlineLogManage = new OfflineLogManage()
+    this.behaviorLogManage = new BehaviorLogManage(
+      this.options,
+      'behavior_log',
+      this.options.enabledBehaviorLogStackSize,
+    )
   }
 
   initEvent() {
@@ -50,6 +65,15 @@ class Tracker {
     functionListener(this.options, (data: FunctionListenerCallbackData) => {
       this.track(TrackerEventTypeEnum.click, data);
     });
+    clickListener(
+      this.options,
+      (data: BehaviorLog) => {
+        this.behaviorLogManage.add(data)
+      },
+      (data: OfflineLog) => {
+        this.offlineLogManage.save(this.options, data)
+      }
+    )
   }
 
   track(trackEventType: TrackerEventTypeEnum, data?: Record<string, any>) {

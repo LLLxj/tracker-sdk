@@ -27,6 +27,7 @@
   "dependencies": {
     "@types/lodash": "^4.17.14",
     "father-build": "^1.22.5",
+    "idb": "^8.0.1",
     "lodash": "^4.17.21",
     "uuid": "^11.0.4"
   }

@@ -1,66 +1,38 @@
 import type { TrackerOptions } from "@/types/tracker"
+import type { OfflineLog } from '@/lib/index'
+import { TrackerEventTypeEnum } from '@/types/trackerEventType'
+import { BehaviorLog } from "../log/behavior-log";
 
 export const clickListener = (
-  options: TrackerOptions,
-  callback: () => void
+  trackerOptions: TrackerOptions,
+  behaviorLogCallback: (Record: BehaviorLog) => void,
+  offlineLogCallback: (Record: OfflineLog) => void,
 ) => {
-  if (!options.enabledGlobalClickEvent) {
+  if (!trackerOptions.enabledGlobalClickEvent) {
     return;
   }
 
-  const invalidateElementTypes = ['HTML', 'BODY']
-
-  const findTrackCategoryElement = (
-    event: MouseEvent, attributeKey: string
-  ): string => {
-    let currentElement: HTMLElement | null = event.target as HTMLElement;
-    const trackCategory = currentElement
-      // .closest('[moli-track-name]')
-      ?.getAttribute(attributeKey);
-    console.log(trackCategory)
-    return ''
-  }
-
-  const findTrackNameElement = (
-    event: MouseEvent, attributeKey: string
-  ): string => {
-    let currentElement: HTMLElement | null = event.target as HTMLElement;
-    const trackName = currentElement
-      // .closest('[moli-track-name]')
-      ?.getAttribute(attributeKey);
-    console.log(trackName)
-    return ''
-  }
-
-
   document.addEventListener('click', (event: MouseEvent) => {
     const target = event.target as HTMLElement;
-    const $elementType = target.tagName;
-    if (invalidateElementTypes?.includes($elementType)) {
-      return;
+    const offlineLog = {
+      title: document.title,
+      pathname: location.pathname,
+      eventType: TrackerEventTypeEnum.click,
+      clickDom: {
+        tagName: target.tagName,
+        id: target.id,
+        className: target.className,
+        textContent: target.textContent?.trim(),
+        html: target.outerHTML.slice(0, 500),
+      },
     }
-    console.log(target)
-    console.log($elementType)
-    const attributeNameKey = options.attributeNameKey || '';
-    const attributeCategoryKey = options.attributeCategoryKey || '';
-    let trackName: string = '';
-    let trackCategory: string = '';
-    if (attributeNameKey) {
-      trackName = findTrackNameElement(event, attributeNameKey)
+    const behaviorLog = {
+      eventType: TrackerEventTypeEnum.click,
+      pathname: location.pathname,
+      clickDom: target.outerHTML.slice(0, 500),
     }
-    if (attributeCategoryKey) {
-      trackCategory = findTrackCategoryElement(event, attributeCategoryKey)
-    }
-    const data = {
-      en: 'click',
-      tagName: target.tagName,
-      id: target.id,
-      className: target.className,
-      timestamp: Date.now(),
-    };
-    if (trackName && trackCategory) {
-      console.log(data)
-      callback();
-    }
+    behaviorLogCallback(behaviorLog)
+    offlineLogCallback(offlineLog);
   });
+
 };
