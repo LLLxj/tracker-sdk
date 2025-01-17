@@ -36,7 +36,7 @@ class Tracker {
       enabledBehaviorLog: true,
       attributeNameKey: 'tracker-name',
       attributeCategoryKey: 'tracker-category',
-      enabledBehaviorLogStackSize: 3
+      enabledBehaviorLogStackSize: 10
     }
     this.options = { ...defaultOptions, ...trackerOptions };
     log({

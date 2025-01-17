@@ -1,9 +1,10 @@
 import { TrackerEventTypeEnum, TrackerOptions } from "@/types";
 import { fetchUploader } from '@/lib/uploader'
+import { getTime } from '@/utils'
 
 export interface BehaviorLog {
   eventType: TrackerEventTypeEnum,
-  time?: number;
+  time?: string;
   pathname: string;
   clickDom: string;
 }
@@ -46,7 +47,7 @@ class BehaviorLogManage {
 
   // 添加日志
   async add(log: BehaviorLog) {
-    const timestamp = Date.now();
+    const timestamp = getTime();
     const newLog = { ...log, time: timestamp };
 
     // 添加到堆栈

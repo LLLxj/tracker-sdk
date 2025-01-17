@@ -5,8 +5,8 @@
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
   "scripts": {
-    "dev": "father dev",
-    "start:static-server": "cd dist && http-server -p 8888",
+    "dev": "father dev --incremental",
+    "start:static-server": "father build && cd dist && http-server -p 8888",
     "build": "father build",
     "build:deps": "father prebundle",
     "prepublishOnly": "father doctor && npm run build"
