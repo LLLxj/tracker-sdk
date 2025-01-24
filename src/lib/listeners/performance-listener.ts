@@ -1,5 +1,5 @@
 import type { TrackerOptions } from "@/types/index";
-import { TrackerEventTypeEnum } from '@/types/trackerEventType'
+import { TrackerEventTypeEnum } from '@/types/tracker-type'
 import { log } from "@/utils/log";
 
 export const performanceListener = (

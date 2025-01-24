@@ -1,6 +1,6 @@
 import { log } from "@/utils/log"
 import type { TrackerOptions } from "@/types/tracker"
-import { TrackerEventTypeNameEnum } from '@/types/trackerEventType' 
+import { TrackerEventTypeNameEnum } from '@/types/tracker-type' 
 
 export const pageUnloadListener = (
   trackerOptions: TrackerOptions,

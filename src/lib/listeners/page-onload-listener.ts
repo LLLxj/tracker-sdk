@@ -1,6 +1,6 @@
 import { log } from "@/utils/index"
 import type { TrackerOptions } from "@/types/tracker"
-import { TrackerEventTypeNameEnum } from '@/types/trackerEventType' 
+import { TrackerEventTypeNameEnum } from '@/types/tracker-type' 
 
 export const pageOnloadListener = (
   trackerOptions: TrackerOptions,
@@ -18,8 +18,7 @@ export const pageOnloadListener = (
         level: 'success',
         message: `load: ${JSON.stringify(data)}`,
       });
-    }
-          
+    }    
     callback(data);
   });
 }

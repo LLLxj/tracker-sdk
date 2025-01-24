@@ -1,6 +1,6 @@
 import type { TrackerOptions } from "@/types/tracker"
 import type { OfflineLog } from '@/lib/index'
-import { TrackerEventTypeEnum } from '@/types/trackerEventType'
+import { TrackerEventTypeEnum } from '@/types/tracker-type'
 import { BehaviorLog } from "../log/behavior-log";
 
 export const clickListener = (
