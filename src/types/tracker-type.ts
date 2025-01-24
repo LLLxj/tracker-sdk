@@ -15,3 +15,7 @@ export enum TrackerEventTypeNameEnum {
   click = '点击',
   error = '错误'
 }
+
+export enum TrackErrorTypeEnum {
+  ReferenceError = 'ReferenceError'
+}
