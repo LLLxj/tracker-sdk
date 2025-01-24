@@ -28,10 +28,13 @@ class ErrorHelper {
    */
   getIsReportId(error: string): {
     hasSameError: boolean;
-    errorId: string,
+    errorId: string;
+    sessionId: string;
   } { 
     const errorId = this.getErrorId(error)
-    const errorIds = this.sessionManage.getErrorIds();
+    const sessionInfo = this.sessionManage.getSessionInfo();
+    const errorIds = sessionInfo.errorIds;
+    const sessionId = sessionInfo.sessionId;
     let hasSameError: boolean;
     if (errorIds?.includes(errorId)) {
       hasSameError = true
@@ -41,7 +44,8 @@ class ErrorHelper {
     }
     return {
       hasSameError,
-      errorId
+      errorId,
+      sessionId,
     }
   }
 }

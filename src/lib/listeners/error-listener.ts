@@ -13,7 +13,7 @@ export const errorListener = (
     const errorHelper = new ErrorHelper()
     const errorInfo = errorHelper.handlerRejection(event)
     
-    const { hasSameError, errorId } = errorHelper.getIsReportId(`${errorType}_${errorMessage}`)
+    const { hasSameError, errorId, sessionId } = errorHelper.getIsReportId(`${errorType}_${errorMessage}`)
     if (hasSameError) {
       return;
     } 
@@ -31,6 +31,7 @@ export const errorListener = (
       version: trackerOptions.version || '',
       clientId: trackerOptions.clientId,
       time: getTime(),
+      sessionId,
     };
     callback(data);
   });
