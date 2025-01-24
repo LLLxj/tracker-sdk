@@ -1,5 +1,5 @@
 import type { LogEvent } from '../types/index';
-import { getTime } from './reportData';
+import { getTime } from './track-helper';
 
 export const log = (event: LogEvent) =>  {
   const { level = 'success', message } = event;

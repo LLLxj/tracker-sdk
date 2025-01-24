@@ -1,5 +1,4 @@
 import lodash from 'lodash'
-import { v4 } from 'uuid';
 
 export const padZero = (num: number) => {
   return num < 10 ? `0${num}` : num;
@@ -43,16 +42,4 @@ export const getURL = (url?: string) => {
   } else {
     return _decodeURI(window.location.href);
   }
-}
-
-export const getSessionId = (): string => {
-  const key = 'track_session_id';
-  const sessionId = sessionStorage.getItem(key);
-  if (sessionId) {
-    return sessionId;
-  }
-
-  const newSessionId = v4();
-  sessionStorage.setItem(key, newSessionId);
-  return newSessionId;
 }

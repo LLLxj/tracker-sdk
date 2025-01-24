@@ -6,29 +6,34 @@ import {
   mixinUploader,
   functionListener,
   clickListener,
+  errorListener,
 } from '@/lib/index'
 import {
   getTime,
-  getSessionId,
   getURL,
 } from '@/utils/index'
 import type {
   TrackerOptions,
-  FunctionListenerCallbackData
+  FunctionListenerCallbackData,
+  ReportErrorData,
+  TrackerConfig,
 } from '@/types/index'
 import OfflineLogManage from "@/lib/log/offline-log";
 import type { OfflineLog } from "@/lib/log/offline-log";
-import { TrackerEventTypeEnum } from '@/types/trackerEventType'
+import { TrackerEventTypeEnum } from '@/types/tracker-type'
 import BehaviorLogManage from "@/lib/log/behavior-log";
 import type { BehaviorLog } from "@/lib/log/behavior-log";
-
+import ErrorLogManage from "@/lib/log/error-log";
+import SessionManage from '@/utils/session'
 class Tracker {
 
   public options: TrackerOptions;
   public offlineLogManage;
   public behaviorLogManage;
+  public errorLogManage;
+  public sessionManage;
 
-  constructor(trackerOptions: TrackerOptions) {
+  constructor(trackerOptions: TrackerConfig) {
     const defaultOptions = {
       name: 'tracker',
       debug: false,
@@ -36,7 +41,8 @@ class Tracker {
       enabledBehaviorLog: true,
       attributeNameKey: 'tracker-name',
       attributeCategoryKey: 'tracker-category',
-      enabledBehaviorLogStackSize: 10
+      enabledBehaviorLogStackSize: 10,
+      version: '1.0.0'
     }
     this.options = { ...defaultOptions, ...trackerOptions };
     log({
@@ -50,11 +56,14 @@ class Tracker {
       'behavior_log',
       this.options.enabledBehaviorLogStackSize,
     )
+    this.errorLogManage = new ErrorLogManage(this.options)
+    this.sessionManage = new SessionManage()
   }
 
   initEvent() {
     pageOnloadListener(this.options, () => {
       this.track(TrackerEventTypeEnum.pageOpen);
+      this.sessionManage.fresh()
     });
     pageUnloadListener(this.options, () => {
       this.track(TrackerEventTypeEnum.pageClose);
@@ -73,7 +82,12 @@ class Tracker {
       (data: OfflineLog) => {
         this.offlineLogManage.save(this.options, data)
       }
-    )
+    ),
+    errorListener(this.options, (data: ReportErrorData) => {
+      if (data) {
+        this.errorLogManage.sendLogsToServer(data);
+      }
+    })
   }
 
   track(trackEventType: TrackerEventTypeEnum, data?: Record<string, any>) {
@@ -83,7 +97,7 @@ class Tracker {
       clientId: this.options.clientId,
       authorization: this.options.authorization,
       time: getTime(), // 时间戳
-      sessionId: getSessionId(),
+      sessionId: this.sessionManage.getSessionId(),
       title: document.title,
       url: getURL(),
       pathname: location.pathname,
@@ -92,6 +106,7 @@ class Tracker {
     const reportRequestUrl = `${this.options.host}${this.options.reportPath}`
     mixinUploader(reportRequestUrl, reportData)
   }
+
 }
 
 export default Tracker
