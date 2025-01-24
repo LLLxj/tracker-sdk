@@ -1,7 +1,7 @@
 import { openDB } from 'idb';
-import { TrackerEventTypeEnum } from '@/types/trackerEventType'
+import { TrackerEventTypeEnum } from '@/types/tracker-type'
 import type { TrackerOptions } from "@/types/tracker"
-import { getTime } from '@/utils/reportData';
+import { getTime } from '@/utils/track-helper';
 
 export interface OfflineLog {
   eventType: TrackerEventTypeEnum,
