@@ -22,7 +22,7 @@ class ErrorHelper {
   }
   
   /**
-   * 是否生成过error
+   * @description 是否生成过error
    * @param error `${event.error.name}_${event.error.message}`
    * @returns 
    */
